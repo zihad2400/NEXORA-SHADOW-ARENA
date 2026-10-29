@@ -6,6 +6,7 @@ export default function AsteroidHunter() {
   const canvasRef = useRef(null);
   const [state, setState] = useState('idle');
   const [score, setScore] = useState(0);
+  const scoreRef = useRef(0); // Added scoreRef
 
   const gameRef = useRef({
     player: { x: 180, y: 340, w: 40, h: 20 },
@@ -30,19 +31,16 @@ export default function AsteroidHunter() {
       lastTime = time;
       const g = gameRef.current;
 
-      // Player Move
       if (g.keys.ArrowLeft) g.player.x -= 300 * dt;
       if (g.keys.ArrowRight) g.player.x += 300 * dt;
       g.player.x = Math.max(0, Math.min(W - g.player.w, g.player.x));
 
-      // Shooting
       if (g.keys.Space && time - g.lastShot > 300) {
         g.bullets.push({ x: g.player.x + g.player.w / 2 - 2, y: g.player.y, w: 4, h: 12, vy: -500 });
         g.lastShot = time;
-        g.keys.Space = false; // Require re-press for semi-auto feel
+        g.keys.Space = false;
       }
 
-      // Spawn Asteroids
       if (time - g.lastSpawn > 1200) {
         g.asteroids.push({
           x: Math.random() * (W - 30),
@@ -53,32 +51,20 @@ export default function AsteroidHunter() {
         g.lastSpawn = time;
       }
 
-      // Update Bullets
       for (let i = g.bullets.length - 1; i >= 0; i--) {
         const b = g.bullets[i];
         b.y += b.vy * dt;
         if (b.y < -20) g.bullets.splice(i, 1);
       }
 
-      // Update Asteroids & Collisions
       for (let i = g.asteroids.length - 1; i >= 0; i--) {
         const a = g.asteroids[i];
         a.y += a.vy * dt;
 
-        if (a.y > H) {
+        if (a.y > H || (a.x + a.r > g.player.x && a.x - a.r < g.player.x + g.player.w && a.y + a.r > g.player.y)) {
           g.active = false;
           setState('gameover');
-          triggerGameOver(score, { survived: time });
-          return;
-        }
-
-        if (
-          a.x + a.r > g.player.x && a.x - a.r < g.player.x + g.player.w &&
-          a.y + a.r > g.player.y
-        ) {
-          g.active = false;
-          setState('gameover');
-          triggerGameOver(score, { survived: time });
+          triggerGameOver(scoreRef.current, { survived: time });
           return;
         }
 
@@ -89,7 +75,8 @@ export default function AsteroidHunter() {
           if (Math.sqrt(dx*dx + dy*dy) < a.r) {
             a.dead = true;
             g.bullets.splice(j, 1);
-            setScore(s => s + Math.floor(a.r));
+            scoreRef.current += Math.floor(a.r);
+            setScore(scoreRef.current);
             break;
           }
         }
@@ -97,7 +84,6 @@ export default function AsteroidHunter() {
         if (a.dead) g.asteroids.splice(i, 1);
       }
 
-      // Render
       ctx.fillStyle = '#0D1120';
       ctx.fillRect(0, 0, W, H);
       
@@ -154,6 +140,7 @@ export default function AsteroidHunter() {
         active: true,
         keys: { ArrowLeft: false, ArrowRight: false, Space: false }
       };
+      scoreRef.current = 0;
       setScore(0);
       lastTime = performance.now();
       animFrame = requestAnimationFrame(loop);
@@ -164,7 +151,7 @@ export default function AsteroidHunter() {
       window.removeEventListener('keydown', keyDown);
       window.removeEventListener('keyup', keyUp);
     };
-  }, [state, score]);
+  }, [state]); // ONLY state here
 
   return (
     <div className="relative w-full max-w-lg mx-auto aspect-square bg-bg-secondary rounded-2xl overflow-hidden border border-border shadow-card select-none">
@@ -187,7 +174,7 @@ export default function AsteroidHunter() {
       
       <canvas ref={canvasRef} width={400} height={400} className="w-full h-full block touch-none" />
 
-      {/* Mobile Touch Controls (Only visible on mobile) */}
+      {/* Mobile Touch Controls */}
       {state === 'playing' && (
         <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end md:hidden z-30">
           <div className="flex gap-3">

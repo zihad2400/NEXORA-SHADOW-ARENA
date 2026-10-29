@@ -24,7 +24,7 @@ export const SESSION_LIMITS = Object.freeze({
   REFLEX_MAX_DURATION_MS: 30 * 1000,
   MEMORY_EASY_MAX_MS: 5 * 60 * 1000,
   MEMORY_HARD_MAX_MS: 10 * 60 * 1000,
-  SESSION_TTL_MS: 15 * 60 * 1000,
+  SESSION_TTL_MS: 60 * 60 * 1000,
 });
 
 export function xpForNextLevel(currentLevel) {
