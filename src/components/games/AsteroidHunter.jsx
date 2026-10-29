@@ -1,8 +1,8 @@
 'use client';
-import { triggerGameOver } from '@/utils/gameEvents';
 import { useEffect, useRef, useState } from 'react';
+import { triggerGameOver } from '@/utils/gameEvents';
 
-export default function AsteroidHunter({ onGameOver }) {
+export default function AsteroidHunter() {
   const canvasRef = useRef(null);
   const [state, setState] = useState('idle');
   const [score, setScore] = useState(0);
@@ -11,7 +11,7 @@ export default function AsteroidHunter({ onGameOver }) {
     player: { x: 180, y: 340, w: 40, h: 20 },
     bullets: [],
     asteroids: [],
-    lastSpawn: performance.now(),
+    lastSpawn: 0,
     active: false,
     keys: { ArrowLeft: false, ArrowRight: false, Space: false }
   });
@@ -65,7 +65,6 @@ export default function AsteroidHunter({ onGameOver }) {
         const a = g.asteroids[i];
         a.y += a.vy * dt;
 
-        // Hit ground (game over)
         if (a.y > H) {
           g.active = false;
           setState('gameover');
@@ -73,7 +72,6 @@ export default function AsteroidHunter({ onGameOver }) {
           return;
         }
 
-        // Hit player
         if (
           a.x + a.r > g.player.x && a.x - a.r < g.player.x + g.player.w &&
           a.y + a.r > g.player.y
@@ -84,7 +82,6 @@ export default function AsteroidHunter({ onGameOver }) {
           return;
         }
 
-        // Hit by bullet
         for (let j = g.bullets.length - 1; j >= 0; j--) {
           const b = g.bullets[j];
           const dx = (b.x + b.w/2) - a.x;
@@ -104,11 +101,9 @@ export default function AsteroidHunter({ onGameOver }) {
       ctx.fillStyle = '#0D1120';
       ctx.fillRect(0, 0, W, H);
       
-      // Starfield effect
       ctx.fillStyle = 'rgba(255,255,255,0.1)';
       for(let i=0; i<20; i++) ctx.fillRect(Math.random()*W, Math.random()*H, 2, 2);
 
-      // Player
       ctx.fillStyle = '#22D3EE';
       ctx.shadowBlur = 10;
       ctx.shadowColor = '#22D3EE';
@@ -118,12 +113,10 @@ export default function AsteroidHunter({ onGameOver }) {
       ctx.lineTo(g.player.x + g.player.w, g.player.y + g.player.h);
       ctx.fill();
 
-      // Bullets
       ctx.fillStyle = '#F8FAFC';
       ctx.shadowBlur = 5;
       g.bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
 
-      // Asteroids
       ctx.fillStyle = '#FB7185';
       ctx.shadowBlur = 10;
       ctx.shadowColor = '#FB7185';
@@ -157,7 +150,7 @@ export default function AsteroidHunter({ onGameOver }) {
         bullets: [],
         asteroids: [],
         lastSpawn: performance.now(),
-        lastShot: performance.now(),
+        lastShot: 0,
         active: true,
         keys: { ArrowLeft: false, ArrowRight: false, Space: false }
       };
@@ -171,24 +164,60 @@ export default function AsteroidHunter({ onGameOver }) {
       window.removeEventListener('keydown', keyDown);
       window.removeEventListener('keyup', keyUp);
     };
-  }, [state]);
+  }, [state, score]);
 
   return (
-    <div className="relative w-full max-w-lg mx-auto aspect-square bg-bg-secondary rounded-2xl overflow-hidden border border-border shadow-card">
+    <div className="relative w-full max-w-lg mx-auto aspect-square bg-bg-secondary rounded-2xl overflow-hidden border border-border shadow-card select-none">
       <div className="absolute top-4 left-4 z-10 font-mono text-cyan text-xl font-bold">Score: {score}</div>
+      
       {state === 'idle' && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg-base/80 z-20">
           <h2 className="font-display text-2xl sm:text-3xl font-bold mb-4 text-error">Asteroid Hunter</h2>
-          <p className="text-text-secondary mb-8 text-center max-w-md">Defend the sector. Use left/right arrows to move and Space to fire.</p>
-          <button onClick={() => (window.dispatchEvent(new Event('nexora:gamestart')), (window.dispatchEvent(new Event('nexora:gamestart')), setState('playing')))} className="btn-nexora text-base sm:text-lg px-6 sm:px-8 py-2 sm:py-3 w-full sm:w-auto">Start Game</button>
+          <p className="text-text-secondary mb-8 text-center max-w-md px-4 text-sm sm:text-base">Use left/right arrows or touch buttons to move. Press Space or Tap to fire.</p>
+          <button onClick={() => (window.dispatchEvent(new Event('nexora:gamestart')), setState('playing'))} className="btn-nexora text-base sm:text-lg px-6 sm:px-8 py-2 sm:py-3 w-full sm:w-auto">Start Game</button>
         </div>
       )}
+      
       {state === 'gameover' && (
-        <div className="absolute inset-0 flex items-center justify-center bg-bg-base/80 z-20">
-          <div className="text-2xl font-bold text-error">Sector Lost</div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-bg-base/80 z-20">
+          <div className="text-2xl font-bold text-error mb-4">Sector Lost</div>
+          <button onClick={() => (window.dispatchEvent(new Event('nexora:gamestart')), setState('playing'))} className="btn-ghost-nexora">Try Again</button>
         </div>
       )}
-      <canvas ref={canvasRef} width={400} height={400} className="w-full h-full block" />
+      
+      <canvas ref={canvasRef} width={400} height={400} className="w-full h-full block touch-none" />
+
+      {/* Mobile Touch Controls (Only visible on mobile) */}
+      {state === 'playing' && (
+        <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end md:hidden z-30">
+          <div className="flex gap-3">
+            <button
+              onPointerDown={(e) => { e.preventDefault(); gameRef.current.keys.ArrowLeft = true; }}
+              onPointerUp={() => { gameRef.current.keys.ArrowLeft = false; }}
+              onPointerLeave={() => { gameRef.current.keys.ArrowLeft = false; }}
+              className="w-14 h-14 bg-bg-elevated/80 border border-border rounded-full flex items-center justify-center text-2xl text-text-primary active:bg-violet/50 touch-none"
+            >
+              ←
+            </button>
+            <button
+              onPointerDown={(e) => { e.preventDefault(); gameRef.current.keys.ArrowRight = true; }}
+              onPointerUp={() => { gameRef.current.keys.ArrowRight = false; }}
+              onPointerLeave={() => { gameRef.current.keys.ArrowRight = false; }}
+              className="w-14 h-14 bg-bg-elevated/80 border border-border rounded-full flex items-center justify-center text-2xl text-text-primary active:bg-violet/50 touch-none"
+            >
+              →
+            </button>
+          </div>
+          <button
+            onPointerDown={(e) => { e.preventDefault(); gameRef.current.keys.Space = true; }}
+            onPointerUp={() => { gameRef.current.keys.Space = false; }}
+            onPointerLeave={() => { gameRef.current.keys.Space = false; }}
+            className="w-16 h-16 bg-error/80 border border-error rounded-full flex items-center justify-center text-xs font-bold text-bg-base active:bg-error touch-none shadow-[0_0_15px_rgba(251,113,133,0.5)]"
+          >
+            FIRE
+          </button>
+        </div>
+      )}
     </div>
   );
 }
