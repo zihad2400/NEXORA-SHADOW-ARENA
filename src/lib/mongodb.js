@@ -1,17 +1,17 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error('MONGODB_URI is not set. Copy .env.example → .env.local');
-}
-
 let cached = global._mongooseCache;
 if (!cached) {
   cached = global._mongooseCache = { conn: null, promise: null };
 }
 
 export async function connectDB() {
+  const MONGODB_URI = process.env.MONGODB_URI;
+
+  if (!MONGODB_URI) {
+    throw new Error('MONGODB_URI is not set. Copy .env.example → .env.local');
+  }
+
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
