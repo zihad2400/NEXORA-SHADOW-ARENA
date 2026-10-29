@@ -51,13 +51,13 @@ export default function TowerStack() {
 
     const handleKey = (e) => { if (e.code === 'Space') dropBlock(); };
     window.addEventListener('keydown', handleKey);
-    window.addEventListener('mousedown', dropBlock);
+    window.addEventListener('pointerdown', dropBlock);
 
     if (state === 'playing') {
       gameRef.current = { blocks: [{ x: W/2 - 50, y: H - BH, w: 100 }], currentBlock: { x: 0, y: H - BH * 2, w: 100 }, active: true, movingRight: true };
       setScore(0); animFrame = requestAnimationFrame(loop);
     }
-    return () => { cancelAnimationFrame(animFrame); window.removeEventListener('keydown', handleKey); window.removeEventListener('mousedown', dropBlock); };
+    return () => { cancelAnimationFrame(animFrame); window.removeEventListener('keydown', handleKey); window.removeEventListener('pointerdown', dropBlock); };
   }, [state]);
 
   return (

@@ -136,7 +136,7 @@ export default function BlockBreaker() {
       gameRef.current.paddle.x = x;
     }
 
-    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('pointermove', handleMouseMove);
 
     if (state === 'playing') {
       initGame();
@@ -145,7 +145,7 @@ export default function BlockBreaker() {
 
     return () => {
       cancelAnimationFrame(animFrame);
-      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('pointermove', handleMouseMove);
     };
   }, [state]); // Only state in dependency array
 
@@ -165,7 +165,7 @@ export default function BlockBreaker() {
           <button onClick={() => (window.dispatchEvent(new Event('nexora:gamestart')), (window.dispatchEvent(new Event('nexora:gamestart')), setState('playing')))} className="btn-ghost-nexora">Try Again</button>
         </div>
       )}
-      <canvas ref={canvasRef} width={400} height={400} className="w-full h-full block" />
+      <canvas ref={canvasRef} width={400} height={400} className="w-full h-full block touch-none" />
     </div>
   );
 }

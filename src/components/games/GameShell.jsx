@@ -40,9 +40,8 @@ export default function GameShell({ game, children }) {
   useEffect(() => {
     const preventScroll = (e) => {
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
-        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-          e.preventDefault();
-        }
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+        e.preventDefault();
       }
     };
     window.addEventListener('keydown', preventScroll, { passive: false });
@@ -142,36 +141,22 @@ export default function GameShell({ game, children }) {
   }
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative select-none">
       <MobileGameControls />
 
-      {/* Responsive Header with PC & Mobile Controls Info */}
+      {/* Responsive Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 bg-bg-elevated/50 p-3 rounded-xl border border-border">
-        
-        {/* PC Controls Info */}
         <div className="hidden md:flex gap-2 text-xs text-text-secondary">
-          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border font-medium flex items-center gap-1.5">
-            ⌨️ Arrow Keys / WASD
-          </span>
-          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border font-medium flex items-center gap-1.5">
-            🖱️ Mouse Move / Click
-          </span>
-          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border font-medium flex items-center gap-1.5">
-            ␣ Space Bar
-          </span>
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border">⌨️ Arrow Keys / WASD</span>
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border">🖱️ Mouse Move / Click</span>
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border">␣ Space Bar</span>
         </div>
-
-        {/* Mobile Controls Info */}
         <div className="flex md:hidden flex-wrap gap-2 text-xs text-text-secondary">
           <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border">👆 Swipe to Move</span>
           <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border">👆 Tap to Action</span>
         </div>
-
         <div className="sm:ml-auto w-full sm:w-auto flex justify-end">
-          <button 
-            onClick={handleMuteToggle} 
-            className="text-text-secondary hover:text-text-primary text-sm flex items-center gap-1 transition-colors bg-bg-elevated px-3 py-1.5 rounded-lg border border-border w-full sm:w-auto justify-center"
-          >
+          <button onClick={handleMuteToggle} className="text-text-secondary hover:text-text-primary text-sm flex items-center gap-1 bg-bg-elevated px-3 py-1.5 rounded-lg border border-border w-full sm:w-auto justify-center">
             {isMuted ? '🔇 Sound Off' : '🔊 Sound On'}
           </button>
         </div>
@@ -183,6 +168,7 @@ export default function GameShell({ game, children }) {
         </div>
       )}
       
+      {/* Disable touch actions to prevent scroll while playing */}
       <div className="w-full max-w-full overflow-hidden flex justify-center touch-none px-1 outline-none" tabIndex={0}>
         {children}
       </div>

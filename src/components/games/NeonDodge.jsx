@@ -146,8 +146,8 @@ export default function NeonDodge() {
       g.player.y = Math.max(0, Math.min(h - g.player.size, g.player.y));
     }
 
-    canvas.addEventListener('mousemove', handleMove);
-    canvas.addEventListener('touchmove', handleMove, { passive: true });
+    canvas.addEventListener('pointermove', handleMove);
+    canvas.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
     window.addEventListener('keydown', handleKey);
 
     if (state === 'playing') {
@@ -167,7 +167,7 @@ export default function NeonDodge() {
     return () => {
       cancelAnimationFrame(animationFrame);
       window.removeEventListener('resize', resize);
-      canvas.removeEventListener('mousemove', handleMove);
+      canvas.removeEventListener('pointermove', handleMove);
       canvas.removeEventListener('touchmove', handleMove);
       window.removeEventListener('keydown', handleKey);
     };
