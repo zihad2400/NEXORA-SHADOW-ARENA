@@ -36,6 +36,19 @@ export default function GameShell({ game, children }) {
       });
   }, [game.slug]);
 
+  // Prevent page scrolling when pressing Arrow Keys or Space on PC
+  useEffect(() => {
+    const preventScroll = (e) => {
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(e.key)) {
+        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+        }
+      }
+    };
+    window.addEventListener('keydown', preventScroll, { passive: false });
+    return () => window.removeEventListener('keydown', preventScroll);
+  }, []);
+
   useEffect(() => {
     const handleGameStart = () => {
       soundEngine.playStart();
@@ -94,7 +107,7 @@ export default function GameShell({ game, children }) {
 
   if (error) {
     return (
-      <div className="surface-elevated p-6 sm:p-4 sm:p-8 text-center">
+      <div className="surface-elevated p-6 sm:p-8 text-center">
         <div className="text-error mb-4">{error}</div>
         <button onClick={() => window.location.reload()} className="btn-nexora">Retry</button>
       </div>
@@ -102,12 +115,12 @@ export default function GameShell({ game, children }) {
   }
 
   if (loading) {
-    return <div className="p-6 sm:p-12 text-center text-text-secondary animate-pulse">Preparing arena...</div>;
+    return <div className="p-12 text-center text-text-secondary animate-pulse">Preparing arena...</div>;
   }
 
   if (result) {
     return (
-      <div className="surface-elevated p-6 sm:p-4 sm:p-8 text-center max-w-md mx-auto animate-fade-up">
+      <div className="surface-elevated p-6 sm:p-8 text-center max-w-md mx-auto animate-fade-up">
         <h2 className="font-display text-2xl font-bold mb-2">Match Complete</h2>
         <div className="text-4xl sm:text-5xl font-mono text-cyan mb-4">{result.score}</div>
         
@@ -132,16 +145,32 @@ export default function GameShell({ game, children }) {
     <div className="w-full relative">
       <MobileGameControls />
 
-      {/* Responsive Header (Stacks on mobile) */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-        <div className="text-xs text-text-secondary md:hidden flex flex-wrap gap-2">
-          <span className="bg-bg-elevated px-2 py-1 rounded border border-border">Swipe to Move</span>
-          <span className="bg-bg-elevated px-2 py-1 rounded border border-border">Tap to Action</span>
+      {/* Responsive Header with PC & Mobile Controls Info */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 bg-bg-elevated/50 p-3 rounded-xl border border-border">
+        
+        {/* PC Controls Info */}
+        <div className="hidden md:flex gap-2 text-xs text-text-secondary">
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border font-medium flex items-center gap-1.5">
+            ⌨️ Arrow Keys / WASD
+          </span>
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border font-medium flex items-center gap-1.5">
+            🖱️ Mouse Move / Click
+          </span>
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border font-medium flex items-center gap-1.5">
+            ␣ Space Bar
+          </span>
         </div>
-        <div className="sm:ml-auto">
+
+        {/* Mobile Controls Info */}
+        <div className="flex md:hidden flex-wrap gap-2 text-xs text-text-secondary">
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border">👆 Swipe to Move</span>
+          <span className="bg-bg-elevated px-3 py-1.5 rounded-lg border border-border">👆 Tap to Action</span>
+        </div>
+
+        <div className="sm:ml-auto w-full sm:w-auto flex justify-end">
           <button 
             onClick={handleMuteToggle} 
-            className="text-text-secondary hover:text-text-primary text-sm flex items-center gap-1 transition-colors bg-bg-elevated px-3 py-1 rounded-lg border border-border"
+            className="text-text-secondary hover:text-text-primary text-sm flex items-center gap-1 transition-colors bg-bg-elevated px-3 py-1.5 rounded-lg border border-border w-full sm:w-auto justify-center"
           >
             {isMuted ? '🔇 Sound Off' : '🔊 Sound On'}
           </button>
@@ -154,8 +183,7 @@ export default function GameShell({ game, children }) {
         </div>
       )}
       
-      {/* Game Container */}
-      <div className="w-full max-w-full overflow-hidden flex justify-center touch-none px-1">
+      <div className="w-full max-w-full overflow-hidden flex justify-center touch-none px-1 outline-none" tabIndex={0}>
         {children}
       </div>
     </div>
