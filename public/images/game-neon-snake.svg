@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1120"/>
+  <g fill="#22D3EE" opacity="0.8">
+    <rect x="180" y="100" width="20" height="20" rx="4"/>
+    <rect x="160" y="100" width="20" height="20" rx="4"/>
+    <rect x="140" y="100" width="20" height="20" rx="4"/>
+    <rect x="140" y="120" width="20" height="20" rx="4"/>
+    <rect x="160" y="120" width="20" height="20" rx="4" fill="#8B5CF6"/>
+  </g>
+  <circle cx="260" cy="110" r="10" fill="#FB7185" shadow-blur="10"/>
+  <text x="20" y="30" fill="#22D3EE" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">NEON SNAKE</text>
+</svg>

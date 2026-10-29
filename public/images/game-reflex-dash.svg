@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1120"/>
+  <rect x="200" y="50" width="10" height="100" fill="#FB7185"/>
+  <rect x="300" y="50" width="10" height="100" fill="#FB7185"/>
+  <circle cx="160" cy="180" r="15" fill="#22D3EE"/>
+  <circle cx="260" cy="150" r="10" fill="#F8FAFC"/>
+  <text x="20" y="30" fill="#FB7185" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">REFLEX DASH</text>
+</svg>

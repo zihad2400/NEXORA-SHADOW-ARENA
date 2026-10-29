@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0D1120"/><stop offset="1" stop-color="#0A0E1A"/>
+    </linearGradient>
+    <radialGradient id="pulse" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#22D3EE" stop-opacity="0.9"/>
+      <stop offset="0.6" stop-color="#22D3EE" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="400" height="240" fill="url(#bg2)"/>
+  <circle cx="200" cy="120" r="85" fill="url(#pulse)"/>
+  <circle cx="200" cy="120" r="55" stroke="#22D3EE" stroke-width="2.5" fill="none"/>
+  <circle cx="200" cy="120" r="25" fill="#22D3EE"/>
+  <text x="20" y="30" fill="#67E8F9" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">SHADOW REFLEX</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1120"/>
+  <path d="M200 180 L220 200 L180 200 Z" fill="#F8FAFC"/>
+  <circle cx="200" cy="180" r="4" fill="#22D3EE"/>
+  <circle cx="150" cy="80" r="15" fill="#FB7185"/>
+  <circle cx="260" cy="100" r="20" fill="#FB7185"/>
+  <circle cx="100" cy="120" r="10" fill="#FB7185"/>
+  <circle cx="300" cy="60" r="12" fill="#FB7185"/>
+  <line x1="200" y1="180" x2="200" y2="140" stroke="#22D3EE" stroke-width="2"/>
+  <text x="20" y="30" fill="#FB7185" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">ASTEROID HUNTER</text>
+</svg>

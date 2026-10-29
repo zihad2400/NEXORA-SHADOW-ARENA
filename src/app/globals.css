@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { color-scheme: dark; }
+  body {
+    @apply bg-bg-base text-text-primary font-body antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139,92,246,0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(34,211,238,0.08), transparent);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  *:focus-visible {
+    @apply outline-none ring-2 ring-violet ring-offset-2 ring-offset-bg-base;
+  }
+  ::selection { @apply bg-violet/40 text-text-primary; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .surface { @apply bg-bg-card border border-border rounded-2xl; }
+  .surface-elevated { @apply bg-bg-elevated border border-border rounded-2xl shadow-card; }
+  .btn-nexora {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5
+           font-semibold text-sm transition-all duration-200
+           bg-violet text-text-primary hover:bg-violet-soft
+           shadow-glow-violet active:scale-[0.98] disabled:opacity-50
+           disabled:cursor-not-allowed disabled:shadow-none;
+  }
+  .btn-ghost-nexora {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-2.5
+           font-semibold text-sm transition-all duration-200
+           border border-border text-text-primary hover:bg-bg-elevated
+           active:scale-[0.98];
+  }
+  .input-nexora {
+    @apply w-full rounded-xl bg-bg-secondary border border-border
+           px-4 py-2.5 text-text-primary placeholder:text-text-secondary/60
+           focus:border-violet focus:ring-1 focus:ring-violet transition-colors;
+  }
+  .badge-nexora {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5
+           text-xs font-medium bg-violet/15 text-violet-soft;
+  }
+  .card-hover { @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-card; }
+  .skeleton {
+    @apply rounded-lg bg-gradient-to-r from-bg-elevated via-bg-card to-bg-elevated
+           bg-[length:200%_100%] animate-shimmer;
+  }
+  .text-gradient {
+    @apply bg-gradient-to-r from-violet-soft via-text-primary to-cyan bg-clip-text text-transparent;
+  }
+}
+
+@layer utilities {
+  .glow-text { text-shadow: 0 0 24px rgba(139,92,246,0.5); }
+  .scrollbar-thin { scrollbar-width: thin; scrollbar-color: rgba(148,163,184,0.3) transparent; }
+}

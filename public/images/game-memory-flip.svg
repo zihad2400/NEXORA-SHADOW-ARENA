@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1120"/>
+  <rect x="120" y="60" width="60" height="80" rx="8" fill="#182137" stroke="#8B5CF6" stroke-width="2"/>
+  <rect x="220" y="60" width="60" height="80" rx="8" fill="#8B5CF6"/>
+  <text x="248" y="110" fill="#F8FAFC" font-family="ui-monospace,monospace" font-size="30" text-anchor="middle">☆</text>
+  <rect x="120" y="150" width="60" height="80" rx="8" fill="#182137" stroke="#22D3EE" stroke-width="2"/>
+  <rect x="220" y="150" width="60" height="80" rx="8" fill="#22D3EE"/>
+  <text x="248" y="200" fill="#0D1120" font-family="ui-monospace,monospace" font-size="30" text-anchor="middle">◇</text>
+  <text x="20" y="30" fill="#8B5CF6" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">MEMORY FLIP</text>
+</svg>

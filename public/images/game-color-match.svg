@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" fill="none">
+  <rect width="400" height="240" fill="#0D1120"/>
+  <text x="100" y="130" fill="#FB7185" font-family="ui-monospace,monospace" font-size="40" font-weight="bold">RED</text>
+  <circle cx="300" cy="120" r="20" fill="#22D3EE"/>
+  <text x="20" y="30" fill="#FB7185" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">COLOR MATCH</text>
+</svg>
